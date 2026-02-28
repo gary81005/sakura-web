@@ -1,65 +1,186 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState, useEffect } from "react";
+import PetalRain from "./components/PetalRain";
+
+// ─── Main Page ─────────────────────────────────────────────────────────────
+export default function SakuraEventPage() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    count: "1",
+    note: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    await new Promise((r) => setTimeout(r, 1200));
+    setLoading(false);
+    setSubmitted(true);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <PetalRain />
+      <div className={`page-wrap ${visible ? "visible" : ""}`}>
+        {/* ── Hero ── */}
+        <section className="hero">
+          <div className="hero-badge">SAKURA FESTIVAL 2025</div>
+          <h1 className="hero-title">
+            春の<span>櫻</span>花祭
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="hero-subtitle">
+            在最美的花季，與我們共賞一片粉紅雪景
+            <br />
+            限量席次，把握這場春日限定的浪漫相遇
           </p>
+          <div className="hero-divider" />
+        </section>
+
+        {/* ── Info Cards ── */}
+        <div className="info-grid">
+          {[
+            { icon: "📅", label: "活動日期", value: "2025年 3月 29日（六）" },
+            { icon: "🕐", label: "集合時間", value: "上午 09:30" },
+            { icon: "📍", label: "活動地點", value: "陽明山花鐘廣場" },
+            { icon: "💰", label: "報名費用", value: "NT$ 980 / 人" },
+          ].map((c) => (
+            <div key={c.label} className="info-card">
+              <div className="info-icon">{c.icon}</div>
+              <div className="info-label">{c.label}</div>
+              <div className="info-value">{c.value}</div>
+            </div>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        {/* ── Highlights ── */}
+        <section>
+          <h2 className="section-title">活動亮點</h2>
+          <div className="highlights">
+            <ul className="highlight-list">
+              {[
+                "導覽員帶路賞花，深入瞭解各品種山櫻、吉野櫻的故事",
+                "戶外野餐席次，精緻和風便當＋抹茶飲料一份",
+                "專業攝影師現場拍攝，活動後提供精選照片下載",
+                "手工和紙押花體驗，帶走獨一無二的春日紀念品",
+                "限量 50 位，確保每位賓客擁有最佳賞花體驗",
+              ].map((item, i) => (
+                <li key={i}>
+                  <span className="dot" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ── Form ── */}
+        <section>
+          <h2 className="section-title">立即報名</h2>
+          {submitted ? (
+            <div className="success">
+              <div className="success-icon">🌸</div>
+              <h2>報名成功！</h2>
+              <p>
+                感謝您的報名，我們將於 2 個工作天內
+                <br />
+                寄送確認信與繳費資訊至您的信箱。
+              </p>
+            </div>
+          ) : (
+            <form className="form-section" onSubmit={handleSubmit}>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label htmlFor="name">姓名 NAME</label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="您的姓名"
+                    required
+                    value={form.name}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="phone">聯絡電話 PHONE</label>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="09xx-xxx-xxx"
+                    required
+                    value={form.phone}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group full">
+                  <label htmlFor="email">電子信箱 EMAIL</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="example@email.com"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="count">報名人數 GUESTS</label>
+                  <select
+                    id="count"
+                    name="count"
+                    value={form.count}
+                    onChange={handleChange}
+                  >
+                    {[1, 2, 3, 4, 5, 6].map((n) => (
+                      <option key={n} value={n}>
+                        {n} 人
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="note">備註 NOTE</label>
+                  <input
+                    id="note"
+                    name="note"
+                    type="text"
+                    placeholder="素食需求、輪椅友善等"
+                    value={form.note}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <button className="submit-btn" type="submit" disabled={loading}>
+                {loading ? "送出中…" : "確認報名 ✦ 春日限定"}
+              </button>
+            </form>
+          )}
+        </section>
+
+        <footer>
+          <p>© 2025 春の櫻花祭 · 洽詢請來信 sakura@example.com</p>
+        </footer>
+      </div>
+    </>
   );
 }
