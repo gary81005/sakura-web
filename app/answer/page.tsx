@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import PetalRain from "./components/PetalRain";
+import PetalRain from "../components/PetalRain";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -308,7 +308,7 @@ export default function SakuraEventPage() {
               </button>
             </form>
           )}
-          <Link href="/quiz">
+          <Link href="/">
             <button className="submit-btn">{"開始！"}</button>
           </Link>
         </section>

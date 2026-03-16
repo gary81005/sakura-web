@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import PetalRain from "./components/PetalRain";
+import PetalRain from "../components/PetalRain";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -9,7 +9,6 @@ import { Autoplay } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import Image from "next/image";
-import Link from "next/link";
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 export default function SakuraEventPage() {
@@ -35,7 +34,7 @@ export default function SakuraEventPage() {
     return bugs;
   };
 
-  const [bugList, setBugList] = useState<string[]>([]);
+  const [bugList, setBugList] = useState<string[]>(generateBugs);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -308,9 +307,6 @@ export default function SakuraEventPage() {
               </button>
             </form>
           )}
-          <Link href="/quiz">
-            <button className="submit-btn">{"開始！"}</button>
-          </Link>
         </section>
 
         <footer>

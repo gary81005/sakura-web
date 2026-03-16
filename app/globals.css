@@ -51,6 +51,10 @@ body {
   overflow-x: hidden;
 }
 
+.petal-container {
+  pointer-events: none; /* 容器不擋 */
+}
+
 /* ── Petals ── */
 .petal-container {
   position: fixed;
@@ -60,6 +64,8 @@ body {
   overflow: hidden;
 }
 .petal {
+  pointer-events: all; /* 花瓣本身可以點 */
+  cursor: pointer;
   position: absolute;
   top: -60px;
   animation: fall linear infinite;

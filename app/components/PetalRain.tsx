@@ -1,10 +1,16 @@
 "use client";
 import { useMemo } from "react";
 import Petal from "./Petal";
-
+import { triggerConfetti } from "../components/Confettiburst";
 // ─── Petals Rain ───────────────────────────────────────────────────────────
-export function PetalRain() {
-  const COLORS = ["#f9a8c4", "#f472b6", "#fda4af", "#fbcfe8"];
+export function PetalRain({ isBug }: { isBug?: boolean }) {
+  const COLORS = useMemo(
+    () =>
+      isBug
+        ? ["#9999", "#8888", "#7777", "#1111"]
+        : ["#f9a8c4", "#f472b6", "#fda4af", "#fbcfe8"],
+    [isBug],
+  );
 
   const petals = useMemo(
     () =>
@@ -31,7 +37,12 @@ export function PetalRain() {
       {petals.map((p) => (
         <Petal
           key={p.id}
+          onClick={(e) => {
+            triggerConfetti(e.clientX, e.clientY);
+            console.log("Petal clicked! Triggering confetti...");
+          }}
           style={{
+            cursor: "pointer",
             left: p.left,
             animationDuration: p.animationDuration,
             animationDelay: p.animationDelay,
