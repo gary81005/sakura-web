@@ -116,8 +116,14 @@ export default function SakuraEventPage() {
     <>
       <PetalRain isBug={bugList.includes("6")} />
       <div
-        className={`flex min-h-[600px] items-center justify-center page-wrap ${visible ? "visible" : ""}`}
+        className={`flex-col flex min-h-[600px] items-center justify-center page-wrap ${visible ? "visible" : ""}`}
       >
+        <ul className="text-2xl font-bold">
+          <li>1・等等你有30秒的時間觀看正確版的網站內容</li>
+          <li>2・再來你有90秒的時間找出五個可疑的問題點</li>
+          <li>3・請用滑鼠按著匡選你看到的問題，不能大範圍匡選</li>
+          <li>4・圈失敗10次或時間到未找到五個錯誤即宣告任務失敗</li>
+        </ul>
         <Link href="/answer">
           <button className="submit-btn">{"進入活動！"}</button>
         </Link>

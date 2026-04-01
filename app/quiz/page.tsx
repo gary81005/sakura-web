@@ -152,7 +152,15 @@ export default function SakuraEventPage() {
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLSelectElement>,
-  ) => setForm({ ...form, [e.target.name]: e.target.value });
+    isPhone = false,
+  ) => {
+    if (isPhone) {
+      const numericOnly = e.target.value.replace(/[^0-9]/g, "");
+      setForm({ ...form, [e.target.name]: numericOnly });
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,7 +178,7 @@ export default function SakuraEventPage() {
   }, [correctCount, router]);
 
   useEffect(() => {
-    if (errorCount > 10) {
+    if (errorCount >= 10) {
       router.push("/fail");
     }
   }, [errorCount, router]);
@@ -181,6 +189,9 @@ export default function SakuraEventPage() {
       <Countdown seconds={90} redirectTo="/fail" />
       <div className="flex items-center justify-center text-2xl font-bold">
         找到的Bug數：{correctCount.length}/5
+      </div>
+      <div className="flex items-center justify-center text-2xl font-bold">
+        失敗次數：{errorCount}/10
       </div>
       <div className={`page-wrap ${visible ? "visible" : ""}`}>
         {/* ── Hero ── */}
@@ -347,7 +358,7 @@ export default function SakuraEventPage() {
                     placeholder="09xx-xxx-xxx"
                     required
                     value={form.phone}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e, true)}
                   />
                 </div>
                 <div
