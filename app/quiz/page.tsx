@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import PetalRain from "../components/PetalRain";
+import { useRouter } from "next/navigation";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -9,13 +10,52 @@ import { Autoplay } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import Image from "next/image";
+import { triggerConfetti } from "../components/Confettiburst";
+import Countdown from "../components/Countdown";
+import useDragSelect from "../hooks/useDragSelect";
+import clsx from "clsx";
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 export default function SakuraEventPage() {
+  const VALUE_BUG_MAP: Record<string, string> = {
+    "50000人": "bug-4",
+    "EUR€ 1980 / 人": "bug-8",
+    吉力馬札羅山: "bug-9",
+    "上午 13:30": "bug-7",
+    "2026年 2月 30日（六）": "bug-5",
+    "This is Tiger Speaking": "bug-3",
+    你不該看到這張卡片: "bug-15",
+  };
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [btnOffset, setBtnOffset] = useState({ x: 0, y: 0 });
+  const [correctCount, setCorrectCount] = useState<string[]>([]);
+  const containerRef = useDragSelect({
+    selector: ".bug-card", // 要偵測的目標
+    onSelect: (elements) => {
+      if (elements.length === 1) {
+        console.log("Selected element:", elements[0]);
+        const rect = elements[0].getBoundingClientRect();
+        const bugId = elements[0].className
+          .split(" ")
+          .find((c) => c.startsWith("bug-"))
+          ?.replace("bug-", "");
+        console.log("Selected element:", elements[0]);
+        console.log("Bug ID:", bugId);
+        if (bugId && !correctCount.includes(bugId)) {
+          setCorrectCount((prev) => [...prev, bugId]);
+          triggerConfetti(
+            rect.left + rect.width / 2,
+            rect.top + rect.height / 2,
+          );
+        }
+      }
+      return;
+      // elements 是 Element[]，可以拿 dataset、textContent 等
+    },
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
@@ -111,13 +151,28 @@ export default function SakuraEventPage() {
     setSubmitted(true);
   };
 
+  useEffect(() => {
+    if (correctCount.length >= 5) {
+      router.push("/success");
+    }
+  }, [correctCount, router]);
+
   return (
     <>
       <PetalRain isBug={bugList.includes("6")} />
-      <div className={`page-wrap ${visible ? "visible" : ""}`}>
+      <Countdown seconds={90} redirectTo="/fail" />
+      <div className="flex items-center justify-center text-2xl font-bold">
+        找到的Bug數：{correctCount.length}/5
+      </div>
+      <div
+        ref={containerRef}
+        className={`page-wrap ${visible ? "visible" : ""}`}
+      >
         {/* ── Hero ── */}
         <section className="hero">
-          <div className="hero-badge">
+          <div
+            className={`hero-badge bug-1 ${bugList.includes("1") ? "bug-card" : ""}`}
+          >
             SAKURA FESTIVAL {bugList.includes("1") ? "2025" : "2026"}
           </div>
           <h1 className="hero-title">
@@ -158,7 +213,9 @@ export default function SakuraEventPage() {
             </SwiperSlide>
             {bugList.includes("2") && (
               <SwiperSlide>
-                <div className="w-[1000px] h-[300px]">
+                <div
+                  className={`w-[1000px] h-[300px] bug-2 ${bugList.includes("2") ? "bug-card" : ""}`}
+                >
                   <Image src="/tiger.jpg" alt="" fill />
                 </div>
               </SwiperSlide>
@@ -170,20 +227,38 @@ export default function SakuraEventPage() {
 
         {/* ── Info Cards ── */}
         <div className="info-grid">
-          {info.map((c) => (
-            <div key={c.label} className="info-card">
-              <div className="info-icon">{c.icon}</div>
-              <div className="info-label">{c.label}</div>
-              <div className="info-value">{c.value}</div>
-            </div>
-          ))}
+          {info.map((c) => {
+            const valueBug = VALUE_BUG_MAP[c.value];
+            return (
+              <div
+                key={c.label}
+                className={clsx(
+                  "info-card",
+                  "bug-20",
+                  bugList.includes("20") && "bug-card",
+                )}
+              >
+                <div className="info-icon">{c.icon}</div>
+                <div className="info-label">{c.label}</div>
+                <div
+                  className={clsx(
+                    "info-value",
+                    valueBug,
+                    valueBug && "bug-card",
+                  )}
+                >
+                  {c.value}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* ── Highlights ── */}
         <section>
           <h2 className="section-title">活動亮點</h2>
           <div className="highlights">
-            <ul className="highlight-list">
+            <ul className={`highlight-list`}>
               {[
                 bugList.includes("19")
                   ? "導覽員帶路賞鯨，深入瞭解各品種鯨魚的故事"
@@ -195,7 +270,10 @@ export default function SakuraEventPage() {
                   : "手工和紙押花體驗，帶走獨一無二的春日紀念品",
                 "限量 50 位，確保每位賓客擁有最佳賞花體驗",
               ].map((item, i) => (
-                <li key={i}>
+                <li
+                  key={i}
+                  className={`${bugList.includes("20") ? "bug-20 bug-card" : ""} ${bugList.includes("19") ? "bug-19 bug-card" : ""}`}
+                >
                   <span className="dot" />
                   <span>{item}</span>
                 </li>
@@ -209,11 +287,15 @@ export default function SakuraEventPage() {
           <h2 className="section-title">立即報名</h2>
           {submitted ? (
             <div className="success">
-              <div className="success-icon">
+              <div
+                className={`success-icon" ${bugList.includes("13") ? "bug-card bug-13" : ""}`}
+              >
                 {bugList.includes("13") ? "💩" : "🌸"}
               </div>
               <h2>報名成功！</h2>
-              <p>
+              <p
+                className={`${bugList.includes("14") ? "bug-card bug-14" : ""}`}
+              >
                 感謝您的報名，我們將於 {bugList.includes("14") ? "365" : "2"}{" "}
                 個工作天內
                 <br />
@@ -223,7 +305,9 @@ export default function SakuraEventPage() {
           ) : (
             <form className="form-section" onSubmit={handleSubmit}>
               <div className="form-grid">
-                <div className="form-group">
+                <div
+                  className={`form-group ${bugList.includes("16") ? "bug-card bug-16" : ""}`}
+                >
                   <label htmlFor="name">姓名 NAME</label>
                   <input
                     id="name"
@@ -236,7 +320,9 @@ export default function SakuraEventPage() {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="form-group">
+                <div
+                  className={`form-group ${bugList.includes("10") ? "bug-card bug-10" : ""}`}
+                >
                   <label htmlFor="phone">聯絡電話 PHONE</label>
                   <input
                     id="phone"
@@ -248,7 +334,9 @@ export default function SakuraEventPage() {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="form-group full">
+                <div
+                  className={`form-group full ${bugList.includes("12") ? "bug-card bug-12" : ""}`}
+                >
                   <label htmlFor="email">電子信箱 EMAIL</label>
                   <input
                     id="email"
@@ -260,7 +348,9 @@ export default function SakuraEventPage() {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="form-group">
+                <div
+                  className={`form-group ${bugList.includes("11") ? "bug-card bug-11" : ""}`}
+                >
                   <label htmlFor="count">報名人數 GUESTS</label>
                   <select
                     id="count"
@@ -278,7 +368,9 @@ export default function SakuraEventPage() {
                     ))}
                   </select>
                 </div>
-                <div className="form-group">
+                <div
+                  className={`form-group ${bugList.includes("21") ? "bug-card bug-21" : ""}`}
+                >
                   <label htmlFor="note">備註 NOTE</label>
                   <input
                     id="note"
@@ -293,7 +385,7 @@ export default function SakuraEventPage() {
               </div>
 
               <button
-                className="submit-btn"
+                className={`submit-btn ${bugList.includes("17") ? "bug-card bug-17" : ""} ${bugList.includes("23") ? "bug-card bug-23" : ""}`}
                 type="submit"
                 disabled={loading || bugList.includes("17")}
                 onMouseEnter={handleBtnHover}
@@ -310,7 +402,9 @@ export default function SakuraEventPage() {
         </section>
 
         <footer>
-          <p>© 2026 春の櫻花祭 · 洽詢請來信 sakura@example.com</p>
+          <p className={bugList.includes("25") ? "bug-card bug-25" : ""}>
+            © 2026 春の櫻花祭 · 洽詢請來信 sakura@example.com
+          </p>
           {/* ── Bug 25: 離奇免責聲明 ── */}
           {bugList.includes("25") && (
             <p style={{ fontSize: "0.6rem", color: "#aaa", marginTop: "4px" }}>

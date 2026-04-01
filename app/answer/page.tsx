@@ -10,6 +10,7 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import Image from "next/image";
 import Link from "next/link";
+import Countdown from "../components/Countdown";
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 export default function SakuraEventPage() {
@@ -116,6 +117,7 @@ export default function SakuraEventPage() {
     <>
       <PetalRain isBug={bugList.includes("6")} />
       <div className={`page-wrap ${visible ? "visible" : ""}`}>
+        <Countdown seconds={30} redirectTo="/quiz" />
         {/* ── Hero ── */}
         <section className="hero">
           <div className="hero-badge">
@@ -308,7 +310,7 @@ export default function SakuraEventPage() {
               </button>
             </form>
           )}
-          <Link href="/">
+          <Link href="/quiz">
             <button className="submit-btn">{"開始！"}</button>
           </Link>
         </section>
