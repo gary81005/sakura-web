@@ -34,7 +34,7 @@ export default function SakuraEventPage() {
   const [correctCount, setCorrectCount] = useState<string[]>([]);
   const [errorCount, setErrorCount] = useState(0);
   const containerRef = useDragSelect({
-    selector: ".bug-card", // 要偵測的目標
+    selector: ".is-bugcard", // 要偵測的目標
     onSelect: (elements) => {
       console.log("Selected element:", elements);
       if (elements.length === 0) {
@@ -197,7 +197,7 @@ export default function SakuraEventPage() {
         {/* ── Hero ── */}
         <section className="hero">
           <div
-            className={`hero-badge bug-1 ${bugList.includes("1") ? "bug-card" : ""}`}
+            className={`hero-badge bug-1 ${bugList.includes("1") ? "is-bugcard" : ""}`}
           >
             SAKURA FESTIVAL {bugList.includes("1") ? "2025" : "2026"}
           </div>
@@ -240,7 +240,7 @@ export default function SakuraEventPage() {
             {bugList.includes("2") && (
               <SwiperSlide>
                 <div
-                  className={`w-[1000px] h-[300px] bug-2 ${bugList.includes("2") ? "bug-card" : ""}`}
+                  className={`w-[1000px] h-[300px] bug-2 ${bugList.includes("2") ? "is-bugcard" : ""}`}
                 >
                   <Image src="/tiger.jpg" alt="" fill />
                 </div>
@@ -262,7 +262,7 @@ export default function SakuraEventPage() {
                 className={clsx(
                   "info-card",
                   "bug-20",
-                  bugList.includes("20") && "bug-card",
+                  bugList.includes("20") && "is-bugcard",
                 )}
               >
                 <div className="info-icon">{c.icon}</div>
@@ -271,7 +271,7 @@ export default function SakuraEventPage() {
                   className={clsx(
                     "info-value",
                     valueBug,
-                    valueBug && "bug-card",
+                    valueBug && "is-bugcard",
                   )}
                 >
                   {c.value}
@@ -299,7 +299,7 @@ export default function SakuraEventPage() {
               ].map((item, i) => (
                 <li
                   key={i}
-                  className={`${bugList.includes("22") ? "bug-22 bug-card" : ""} ${bugList.includes("19") ? "bug-19 bug-card" : ""}`}
+                  className={`${bugList.includes("22") ? "bug-22 is-bugcard" : ""} ${bugList.includes("19") ? "bug-19 is-bugcard" : ""}`}
                 >
                   <span className="dot" />
                   <span>{item}</span>
@@ -315,13 +315,13 @@ export default function SakuraEventPage() {
           {submitted ? (
             <div className="success">
               <div
-                className={`success-icon" ${bugList.includes("13") ? "bug-card bug-13" : ""}`}
+                className={`success-icon" ${bugList.includes("13") ? "is-bugcard bug-13" : ""}`}
               >
                 {bugList.includes("13") ? "💩" : "🌸"}
               </div>
               <h2>報名成功！</h2>
               <p
-                className={`${bugList.includes("14") ? "bug-card bug-14" : ""}`}
+                className={`${bugList.includes("14") ? "is-bugcard bug-14" : ""}`}
               >
                 感謝您的報名，我們將於 {bugList.includes("14") ? "365" : "2"}{" "}
                 個工作天內
@@ -333,7 +333,7 @@ export default function SakuraEventPage() {
             <form className="form-section" onSubmit={handleSubmit}>
               <div className="form-grid">
                 <div
-                  className={`form-group ${bugList.includes("16") ? "bug-card bug-16" : ""}`}
+                  className={`form-group ${bugList.includes("16") ? "is-bugcard bug-16" : ""}`}
                 >
                   <label htmlFor="name">姓名 NAME</label>
                   <input
@@ -348,7 +348,7 @@ export default function SakuraEventPage() {
                   />
                 </div>
                 <div
-                  className={`form-group ${bugList.includes("10") ? "bug-card bug-10" : ""}`}
+                  className={`form-group ${bugList.includes("10") ? "is-bugcard bug-10" : ""}`}
                 >
                   <label htmlFor="phone">聯絡電話 PHONE</label>
                   <input
@@ -362,7 +362,7 @@ export default function SakuraEventPage() {
                   />
                 </div>
                 <div
-                  className={`form-group full ${bugList.includes("12") ? "bug-card bug-12" : ""}`}
+                  className={`form-group full ${bugList.includes("12") ? "is-bugcard bug-12" : ""}`}
                 >
                   <label htmlFor="email">電子信箱 EMAIL</label>
                   <input
@@ -376,7 +376,7 @@ export default function SakuraEventPage() {
                   />
                 </div>
                 <div
-                  className={`form-group ${bugList.includes("11") ? "bug-card bug-11" : ""}`}
+                  className={`form-group ${bugList.includes("11") ? "is-bugcard bug-11" : ""}`}
                 >
                   <label htmlFor="count">報名人數 GUESTS</label>
                   <select
@@ -396,7 +396,7 @@ export default function SakuraEventPage() {
                   </select>
                 </div>
                 <div
-                  className={`form-group ${bugList.includes("21") ? "bug-card bug-21" : ""}`}
+                  className={`form-group ${bugList.includes("21") ? "is-bugcard bug-21" : ""}`}
                 >
                   <label htmlFor="note">備註 NOTE</label>
                   <input
@@ -412,7 +412,7 @@ export default function SakuraEventPage() {
               </div>
 
               <button
-                className={`submit-btn ${bugList.includes("17") ? "bug-card bug-17" : ""} ${bugList.includes("23") ? "bug-card bug-23" : ""}`}
+                className={`submit-btn ${bugList.includes("17") ? "is-bugcard bug-17" : ""} ${bugList.includes("23") ? "is-bugcard bug-23" : ""}`}
                 type="submit"
                 disabled={loading || bugList.includes("17")}
                 onMouseEnter={handleBtnHover}
@@ -429,7 +429,7 @@ export default function SakuraEventPage() {
         </section>
 
         <footer>
-          <p className={bugList.includes("25") ? "bug-card bug-25" : ""}>
+          <p className={bugList.includes("25") ? "is-bugcard bug-25" : ""}>
             © 2026 春の櫻花祭 · 洽詢請來信 sakura@example.com
           </p>
           {/* ── Bug 25: 離奇免責聲明 ── */}
