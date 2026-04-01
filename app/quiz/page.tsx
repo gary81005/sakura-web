@@ -35,22 +35,28 @@ export default function SakuraEventPage() {
   const containerRef = useDragSelect({
     selector: ".bug-card", // 要偵測的目標
     onSelect: (elements) => {
-      if (elements.length === 1) {
-        console.log("Selected element:", elements[0]);
-        const rect = elements[0].getBoundingClientRect();
-        const bugId = elements[0].className
-          .split(" ")
-          .find((c) => c.startsWith("bug-"))
-          ?.replace("bug-", "");
-        console.log("Selected element:", elements[0]);
-        console.log("Bug ID:", bugId);
-        if (bugId && !correctCount.includes(bugId)) {
-          setCorrectCount((prev) => [...prev, bugId]);
-          triggerConfetti(
-            rect.left + rect.width / 2,
-            rect.top + rect.height / 2,
-          );
-        }
+      console.log("Selected element:", elements);
+      if (
+        elements.length === 1 ||
+        elements.some((el) => el.classList.contains("bug-20"))
+      ) {
+        elements.forEach((el) => {
+          console.log("Selected element:", el);
+          const rect = el.getBoundingClientRect();
+          const bugId = el.className
+            .split(" ")
+            .find((c) => c.startsWith("bug-"))
+            ?.replace("bug-", "");
+          console.log("Selected element:", el);
+          console.log("Bug ID:", bugId);
+          if (bugId && !correctCount.includes(bugId)) {
+            setCorrectCount((prev) => [...prev, bugId]);
+            triggerConfetti(
+              rect.left + rect.width / 2,
+              rect.top + rect.height / 2,
+            );
+          }
+        });
       }
       return;
       // elements 是 Element[]，可以拿 dataset、textContent 等
@@ -158,16 +164,13 @@ export default function SakuraEventPage() {
   }, [correctCount, router]);
 
   return (
-    <>
+    <div ref={containerRef}>
       <PetalRain isBug={bugList.includes("6")} />
       <Countdown seconds={90} redirectTo="/fail" />
       <div className="flex items-center justify-center text-2xl font-bold">
         找到的Bug數：{correctCount.length}/5
       </div>
-      <div
-        ref={containerRef}
-        className={`page-wrap ${visible ? "visible" : ""}`}
-      >
+      <div className={`page-wrap ${visible ? "visible" : ""}`}>
         {/* ── Hero ── */}
         <section className="hero">
           <div
@@ -229,6 +232,7 @@ export default function SakuraEventPage() {
         <div className="info-grid">
           {info.map((c) => {
             const valueBug = VALUE_BUG_MAP[c.value];
+            console.log(valueBug);
             return (
               <div
                 key={c.label}
@@ -265,14 +269,14 @@ export default function SakuraEventPage() {
                   : "導覽員帶路賞花，深入瞭解各品種山櫻、吉野櫻的故事",
                 "戶外野餐席次，精緻和風便當＋抹茶飲料一份",
                 "專業攝影師現場拍攝，活動後提供精選照片下載",
-                bugList.includes("20")
+                bugList.includes("22")
                   ? "手工和紙押鯨魚體驗，帶走獨一無二的秋日紀念品"
                   : "手工和紙押花體驗，帶走獨一無二的春日紀念品",
                 "限量 50 位，確保每位賓客擁有最佳賞花體驗",
               ].map((item, i) => (
                 <li
                   key={i}
-                  className={`${bugList.includes("20") ? "bug-20 bug-card" : ""} ${bugList.includes("19") ? "bug-19 bug-card" : ""}`}
+                  className={`${bugList.includes("22") ? "bug-22 bug-card" : ""} ${bugList.includes("19") ? "bug-19 bug-card" : ""}`}
                 >
                   <span className="dot" />
                   <span>{item}</span>
@@ -413,6 +417,6 @@ export default function SakuraEventPage() {
           )}
         </footer>
       </div>
-    </>
+    </div>
   );
 }

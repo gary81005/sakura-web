@@ -36,7 +36,7 @@ export function PetalRain({ isBug }: { isBug?: boolean }) {
     <div className="petal-container" aria-hidden="true">
       {petals.map((p) => (
         <Petal
-          className={`${isBug ? "bug-card" : ""}`}
+          className={`${isBug ? "bug-card bug-6" : ""}`}
           key={p.id}
           onClick={(e) => {
             triggerConfetti(e.clientX, e.clientY);
