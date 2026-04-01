@@ -32,13 +32,19 @@ export default function SakuraEventPage() {
   const [visible, setVisible] = useState(false);
   const [btnOffset, setBtnOffset] = useState({ x: 0, y: 0 });
   const [correctCount, setCorrectCount] = useState<string[]>([]);
+  const [errorCount, setErrorCount] = useState(0);
   const containerRef = useDragSelect({
     selector: ".bug-card", // 要偵測的目標
     onSelect: (elements) => {
       console.log("Selected element:", elements);
+      if (elements.length === 0) {
+        setErrorCount((c) => c + 1);
+        return;
+      }
       if (
         elements.length === 1 ||
-        elements.some((el) => el.classList.contains("bug-20"))
+        (elements.length === 2 &&
+          elements.some((el) => el.classList.contains("bug-20")))
       ) {
         elements.forEach((el) => {
           console.log("Selected element:", el);
@@ -162,6 +168,12 @@ export default function SakuraEventPage() {
       router.push("/success");
     }
   }, [correctCount, router]);
+
+  useEffect(() => {
+    if (errorCount > 10) {
+      router.push("/fail");
+    }
+  }, [errorCount, router]);
 
   return (
     <div ref={containerRef}>
