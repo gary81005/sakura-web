@@ -299,7 +299,7 @@ export default function SakuraEventPage() {
               ].map((item, i) => (
                 <li
                   key={i}
-                  className={`${bugList.includes("22") ? "bug-22 is-bugcard" : bugList.includes("19") ? "bug-19 is-bugcard" : ""}`}
+                  className={`${bugList.includes("22") && i === 0 ? "bug-22 is-bugcard" : ""} ${bugList.includes("19") && i === 3 ? "bug-19 is-bugcard" : ""}`}
                 >
                   <span className="dot" />
                   <span>{item}</span>
